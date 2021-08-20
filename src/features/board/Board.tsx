@@ -22,7 +22,13 @@ import PageError from "components/PageError";
 
 const BoardContainer = styled.div`
   min-width: calc(100vw - ${sidebarWidth});
+  overflow-x: scroll;
   display: flex;
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+  ::-webkit-scrollbar {
+    display: none;
+  }
 `;
 
 const ColumnContainer = styled.div`
@@ -47,7 +53,7 @@ const RightMargin = styled.div`
   &:after {
     content: "";
     display: block;
-    width: 0.5rem;
+    width: 0.2rem;
   }
 `;
 
