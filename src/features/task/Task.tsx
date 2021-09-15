@@ -16,7 +16,7 @@ import { Avatar } from "@material-ui/core";
 import { setEditDialogOpen } from "./TaskSlice";
 import TaskLabels from "./TaskLabels";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faArrowUp } from "@fortawesome/free-solid-svg-icons";
+import { faArrowUp, faThumbsUp } from "@fortawesome/free-solid-svg-icons";
 import { selectMembersEntities } from "features/member/MemberSlice";
 
 const getBackgroundColor = (isDragging: boolean, isGroupedOver: boolean) => {
@@ -78,6 +78,17 @@ const CardIcon = styled.div`
   font-size: 0.75rem;
 `;
 
+const Button = styled.button`
+  border-radius: 15px;
+  border: none;
+  background: transparent;
+  cursor: pointer;
+  transition: ease background-color 250ms;
+  &:hover {
+    background-color: white;
+  }
+`;
+
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 const TaskId = styled.small`
   flex-grow: 1;
@@ -104,6 +115,10 @@ const getStyle = (provided: DraggableProvided, style?: Record<string, any>) => {
   };
 };
 
+function clickMe() {
+  alert("You Clicked Me");
+}
+
 export const TaskFooter = ({ task }: { task: ITask }) => {
   const membersByIds = useSelector(selectMembersEntities);
   const assignees = task.assignees.map(
@@ -115,6 +130,13 @@ export const TaskFooter = ({ task }: { task: ITask }) => {
       <CardIcon data-testid="task-priority">
         <FontAwesomeIcon icon={faArrowUp} color={PRIO_COLORS[task.priority]} />
       </CardIcon>
+      {
+        <CardIcon>
+          <Button onClick={clickMe}>
+            <FontAwesomeIcon icon={faThumbsUp} color={PRIO_COLORS.M} />
+          </Button>
+        </CardIcon>
+      }
       {assignees.length > 0 && (
         <Assignees>
           <AvatarGroup
