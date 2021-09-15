@@ -122,6 +122,7 @@ const getStyle = (provided: DraggableProvided, style?: Record<string, any>) => {
 // }
 
 const clickMe = (event: React.MouseEvent<HTMLButtonElement>) => {
+  event.stopPropagation();
   <FontAwesomeIcon
     icon={faThumbsUp}
     color={PRIO_COLORS.M}
