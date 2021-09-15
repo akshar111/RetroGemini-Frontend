@@ -59,11 +59,13 @@ export const Content = styled.div`
 
 const TextContent = styled.div`
   position: relative;
-  padding-right: 14px;
   word-break: break-word;
   color: ${PRIMARY};
   font-weight: bold;
   font-size: 12px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
 `;
 
 const Footer = styled.div`
@@ -84,9 +86,6 @@ const Button = styled.button`
   background: transparent;
   cursor: pointer;
   transition: ease background-color 250ms;
-  &:hover {
-    background-color: white;
-  }
 `;
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
@@ -115,28 +114,33 @@ const getStyle = (provided: DraggableProvided, style?: Record<string, any>) => {
   };
 };
 
-function clickMe() {
-  alert("You Clicked Me");
-}
+// function clickMe() {
+//   css={css`
+//   color: #666eee;
+// `}
+//   alert("You Clicked Me");
+// }
 
-export const TaskFooter = ({ task }: { task: ITask }) => {
+const clickMe = (event: React.MouseEvent<HTMLButtonElement>) => {
+  <FontAwesomeIcon
+    icon={faThumbsUp}
+    color={PRIO_COLORS.M}
+    css={css`
+      color: #666eee;
+    `}
+  />;
+};
+
+export const TaskTop = ({ task }: { task: ITask }) => {
   const membersByIds = useSelector(selectMembersEntities);
   const assignees = task.assignees.map(
     (assigneeId) => membersByIds[assigneeId]
   ) as BoardMember[];
 
   return (
-    <Footer>
-      <CardIcon data-testid="task-priority">
-        <FontAwesomeIcon icon={faArrowUp} color={PRIO_COLORS[task.priority]} />
-      </CardIcon>
-      {
-        <CardIcon>
-          <Button onClick={clickMe}>
-            <FontAwesomeIcon icon={faThumbsUp} color={PRIO_COLORS.M} />
-          </Button>
-        </CardIcon>
-      }
+    <TextContent>
+      {task.title}
+      &nbsp;
       {assignees.length > 0 && (
         <Assignees>
           <AvatarGroup
@@ -146,8 +150,8 @@ export const TaskFooter = ({ task }: { task: ITask }) => {
                 height: 1.25rem;
                 width: 1.25rem;
                 font-size: 8px;
-                margin-left: -4px;
                 border: none;
+                margin-left: -4px;
               }
             `}
           >
@@ -169,6 +173,36 @@ export const TaskFooter = ({ task }: { task: ITask }) => {
           </AvatarGroup>
         </Assignees>
       )}
+    </TextContent>
+  );
+};
+
+export const TaskFooter = ({ task }: { task: ITask }) => {
+  // const membersByIds = useSelector(selectMembersEntities);
+  // const assignees = task.assignees.map(
+  //   (assigneeId) => membersByIds[assigneeId]
+  // ) as BoardMember[];
+
+  return (
+    <Footer>
+      <CardIcon data-testid="task-priority">
+        <FontAwesomeIcon icon={faArrowUp} color={PRIO_COLORS[task.priority]} />
+      </CardIcon>
+      {
+        <CardIcon>
+          <Button onClick={clickMe}>
+            <FontAwesomeIcon
+              icon={faThumbsUp}
+              color={PRIO_COLORS.M}
+              css={css`
+                &:hover {
+                  color: #666eee;
+                }
+              `}
+            />
+          </Button>
+        </CardIcon>
+      }
     </Footer>
   );
 };
@@ -207,7 +241,7 @@ const Task = ({ task: task, style, index }: Props) => {
           css={taskContainerStyles}
         >
           <Content>
-            <TextContent>{task.title}</TextContent>
+            <TaskTop task={task} />
             <TaskId>id: {task.id}</TaskId>
             <TaskLabels task={task} />
             <TaskFooter task={task} />
