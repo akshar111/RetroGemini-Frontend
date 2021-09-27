@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import styled from "@emotion/styled";
 import { ITask, BoardMember } from "types";
 import {
@@ -6,7 +6,7 @@ import {
   Draggable,
   DraggableStateSnapshot,
 } from "react-beautiful-dnd";
-import { N30, N0, N70, PRIMARY } from "utils/colors";
+import { N30, N0, N70, P300, PRIMARY } from "utils/colors";
 import { PRIO_COLORS } from "const";
 import { taskContainerStyles } from "styles";
 import { AvatarGroup } from "@material-ui/lab";
@@ -114,24 +114,6 @@ const getStyle = (provided: DraggableProvided, style?: Record<string, any>) => {
   };
 };
 
-// function clickMe() {
-//   css={css`
-//   color: #666eee;
-// `}
-//   alert("You Clicked Me");
-// }
-
-const clickMe = (event: React.MouseEvent<HTMLButtonElement>) => {
-  event.stopPropagation();
-  <FontAwesomeIcon
-    icon={faThumbsUp}
-    color={PRIO_COLORS.M}
-    css={css`
-      color: #666eee;
-    `}
-  />;
-};
-
 export const TaskTop = ({ task }: { task: ITask }) => {
   const membersByIds = useSelector(selectMembersEntities);
   const assignees = task.assignees.map(
@@ -179,10 +161,12 @@ export const TaskTop = ({ task }: { task: ITask }) => {
 };
 
 export const TaskFooter = ({ task }: { task: ITask }) => {
-  // const membersByIds = useSelector(selectMembersEntities);
-  // const assignees = task.assignees.map(
-  //   (assigneeId) => membersByIds[assigneeId]
-  // ) as BoardMember[];
+  const [voteColor, setVoteColor] = useState(false);
+
+  const changeVoteColor = (e: React.MouseEvent<HTMLButtonElement>) => {
+    e.stopPropagation();
+    setVoteColor(!voteColor);
+  };
 
   return (
     <Footer>
@@ -191,10 +175,10 @@ export const TaskFooter = ({ task }: { task: ITask }) => {
       </CardIcon>
       {
         <CardIcon>
-          <Button onClick={clickMe}>
+          <Button onClick={changeVoteColor}>
             <FontAwesomeIcon
               icon={faThumbsUp}
-              color={PRIO_COLORS.M}
+              color={voteColor ? P300 : N70}
               css={css`
                 &:hover {
                   color: #666eee;
